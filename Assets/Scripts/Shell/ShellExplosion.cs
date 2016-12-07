@@ -3,6 +3,7 @@
 public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
+    public LayerMask m_TreeMask;                        // Used to filter what the explosion affects, this should be set to "Tree".
     public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
     public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
     public float m_MaxDamage = 100f;                    // The amount of damage done if the explosion is centred on a tank.
@@ -25,13 +26,13 @@ public class ShellExplosion : MonoBehaviour
     private void OnTriggerEnter (Collider other)
     {
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
-        Collider[] colliders = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
+        Collider[] players = Physics.OverlapSphere (transform.position, m_ExplosionRadius, m_TankMask);
 
         // Go through all the colliders...
-        for (int i = 0; i < colliders.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             // ... and find their rigidbody.
-            Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody> ();
+            Rigidbody targetRigidbody = players[i].GetComponent<Rigidbody> ();
 
             // If they don't have a rigidbody, go on to the next collider.
             if (!targetRigidbody)
@@ -53,6 +54,24 @@ public class ShellExplosion : MonoBehaviour
             // Deal this damage to the tank.
             targetHealth.TakeDamage (damage);
         }
+
+        Collider[] trees = Physics.OverlapSphere (transform.position, 2f, m_TreeMask);
+
+        for (int i = 0; i < trees.Length; i++)
+        {
+            Transform target = trees[i].GetComponent<Transform>();
+
+            if (!target)
+                continue;
+            
+            TreeDestroy treeDestroy = target.GetComponent<TreeDestroy>();
+
+            if (!treeDestroy)
+                continue;
+            
+            treeDestroy.TakeDamage();
+        }
+
 
         ParticleSystem explosionParticles = Instantiate(m_ExplosionParticles, transform.position, transform.rotation) as ParticleSystem;
 
