@@ -5,7 +5,6 @@ using UnityEngine;
 public class TankManager
 {
     public Color m_PlayerColor;            
-    public Transform m_SpawnPoint;         
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
@@ -55,10 +54,10 @@ public class TankManager
     }
 
 
-    public void Reset()
+    public void Reset(Transform spawPoint)
     {
-        m_Instance.transform.position = m_SpawnPoint.position;
-        m_Instance.transform.rotation = m_SpawnPoint.rotation;
+        m_Instance.transform.position = spawPoint.position;
+        m_Instance.transform.rotation = spawPoint.rotation;
 
         m_Instance.SetActive(false);
         m_Instance.SetActive(true);

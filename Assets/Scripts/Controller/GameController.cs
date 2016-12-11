@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
     public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
     public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
+    public GameObject[] m_Maps;
 
 
     private int m_RoundNumber;                  // Which round the game is currently on.
@@ -19,6 +20,8 @@ public class GameController : MonoBehaviour
     private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
     private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
     private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
+    private GameObject m_CurrentMap;
+    private int m_CurrentMapIndex;
 
 
     private void Start()
@@ -27,6 +30,9 @@ public class GameController : MonoBehaviour
         m_StartWait = new WaitForSeconds (m_StartDelay);
         m_EndWait = new WaitForSeconds (m_EndDelay);
 
+        m_CurrentMapIndex = 2;// Random.Range(0, m_Maps.Length);
+
+        CreateMap();
         SpawnAllTanks();
         SetCameraTargets();
 
@@ -40,9 +46,10 @@ public class GameController : MonoBehaviour
         // For all the tanks...
         for (int i = 0; i < m_Tanks.Length; i++)
         {
+            Transform spawPoint = m_CurrentMap.transform.FindChild("SpawPoint" + (i + 1));
             // ... create them, set their player number and references needed for control.
             m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
+                Instantiate(m_TankPrefab, spawPoint.position, spawPoint.rotation) as GameObject;
             m_Tanks[i].m_PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }
@@ -96,6 +103,7 @@ public class GameController : MonoBehaviour
     private IEnumerator RoundStarting ()
     {
         // As soon as the round starts reset the tanks and make sure they can't move.
+        ResetMap();
         ResetAllTanks ();
         DisableTankControl ();
 
@@ -239,7 +247,8 @@ public class GameController : MonoBehaviour
     {
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            m_Tanks[i].Reset();
+            Transform spawPoint = m_CurrentMap.transform.FindChild("SpawPoint" + (i + 1));
+            m_Tanks[i].Reset(spawPoint);
         }
     }
 
@@ -259,5 +268,16 @@ public class GameController : MonoBehaviour
         {
             m_Tanks[i].DisableControl();
         }
+    }
+
+    private void CreateMap()
+    {
+        m_CurrentMap = Instantiate(m_Maps[m_CurrentMapIndex]);
+    }
+
+    private void ResetMap()
+    {
+        Destroy(m_CurrentMap);
+        CreateMap();
     }
 }
