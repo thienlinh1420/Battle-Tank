@@ -8,15 +8,18 @@ public class GameController : MonoBehaviour
     public int m_NumRoundsToWin = 5;            // The number of rounds a single player has to win to win the game.
     public float m_StartDelay = 3f;             // The delay between the start of RoundStarting and RoundPlaying phases.
     public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases.
+    public float m_SpawnHealthDelay = 30f;
     public CameraControl m_CameraControl;       // Reference to the CameraControl script for control during different phases.
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
     public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
     public GameObject[] m_Maps;
+    public GameObject m_HealthPack;
 
 
     private int m_RoundNumber;                  // Which round the game is currently on.
     private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
     private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
+    private WaitForSeconds m_SpawnHealthWait;
     private TankManager m_RoundWinner;          // Reference to the winner of the current round.  Used to make an announcement of who won.
     private TankManager m_GameWinner;           // Reference to the winner of the game.  Used to make an announcement of who won.
     private GameObject m_CurrentMap;
@@ -28,6 +31,7 @@ public class GameController : MonoBehaviour
         // Create the delays so they only have to be made once.
         m_StartWait = new WaitForSeconds (m_StartDelay);
         m_EndWait = new WaitForSeconds (m_EndDelay);
+        m_SpawnHealthWait = new WaitForSeconds(m_SpawnHealthDelay);
 
         m_CurrentMapIndex = 1;// Random.Range(0, m_Maps.Length);
 
@@ -126,10 +130,13 @@ public class GameController : MonoBehaviour
         // Clear the text from the screen.
         m_MessageText.text = string.Empty;
 
+
+
         // While there is not one tank left...
         while (!OneTankLeft())
         {
-            // ... return on the next frame.
+            yield return StartCoroutine(SpawnHealthPosition());
+
             yield return null;
         }
     }
@@ -278,5 +285,19 @@ public class GameController : MonoBehaviour
     {
         Destroy(m_CurrentMap);
         CreateMap();
+    }
+
+    private IEnumerator SpawnHealthPosition()
+    {
+        yield return m_SpawnHealthWait;
+
+        GameObject HealthPackInstance = Instantiate(m_HealthPack) as GameObject;
+
+        Transform GroupPos = m_CurrentMap.transform.Find("SpawnHealthPositions");
+
+        int index = Random.Range(0, GroupPos.transform.childCount);
+        Vector3 pos = GroupPos.GetChild(index).transform.position;
+        HealthPackInstance.transform.position = pos;
+
     }
 }

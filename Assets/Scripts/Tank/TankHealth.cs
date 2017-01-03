@@ -39,7 +39,7 @@ public class TankHealth : MonoBehaviour
 
         // Change the UI elements appropriately.
         SetHealthUI ();
-        DisplayHealthText(amount);
+        DisplayHealthText(-amount);
 
         // If the current health is at or below zero and it has not yet been registered, call OnDeath.
         if (m_CurrentHealth <= 0f && !m_Dead)
@@ -54,16 +54,25 @@ public class TankHealth : MonoBehaviour
         Text healthTextInstance = Instantiate(m_HealthText, m_HealthText.transform.parent) as Text;
         healthTextInstance.gameObject.SetActive(true);
 
-        if (amount == 0)
+        if (amount <= 0)
         {
-            healthTextInstance.text = "MISS";
+            if (amount == 0)
+            {
+                healthTextInstance.text = "MISS";
+            }
+            else
+            {
+                healthTextInstance.text = amount.ToString();
+            }
+
+            healthTextInstance.color = m_ZeroHealthColor;
         }
         else
         {
             healthTextInstance.text = amount.ToString();
-        }
+            healthTextInstance.color = m_FullHealthColor;
 
-        healthTextInstance.color = m_ZeroHealthColor;
+        }
         healthTextInstance.GetComponent<Animator>().SetTrigger("Hit");
         Destroy(healthTextInstance.gameObject, 1f);
     }
@@ -103,5 +112,17 @@ public class TankHealth : MonoBehaviour
 
         // Turn the tank off.
         gameObject.SetActive (false);
+    }
+
+    public void RestoreHealth(float health)
+    {
+        m_CurrentHealth += health;
+
+        if (m_CurrentHealth > m_StartingHealth)
+        {
+            m_CurrentHealth = m_StartingHealth;
+        }
+        SetHealthUI();
+        DisplayHealthText(health);
     }
 }
