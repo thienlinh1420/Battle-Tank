@@ -3,14 +3,14 @@ using UnityEngine;
 public class UIDirectionControl : MonoBehaviour
 {
     public bool m_UseRelativeRotation = true;  
-
+    public float rotation;
 
     private Quaternion m_RelativeRotation;     
 
 
     private void Start()
     {
-        m_RelativeRotation = transform.parent.localRotation;
+        m_RelativeRotation = Quaternion.Euler(new Vector3(90f, 0f, rotation));
     }
 
 

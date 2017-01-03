@@ -58,3 +58,4 @@
 /Volumes/DATA/Unity projects/Battle-Tank/Temp/bin/Debug/Unity.CecilTools.dll
 /Volumes/DATA/Unity projects/Battle-Tank/Temp/bin/Debug/Mono.Cecil.Pdb.dll
 /Volumes/DATA/Unity projects/Battle-Tank/Temp/bin/Debug/Mono.Cecil.Mdb.dll
+/Volumes/DATA/Unity projects/Battle-Tank/Temp/bin/Debug/ShaderForge.dll

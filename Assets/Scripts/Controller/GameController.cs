@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour
     public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases.
     public CameraControl m_CameraControl;       // Reference to the CameraControl script for control during different phases.
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
-    public GameObject m_TankPrefab;             // Reference to the prefab the players will control.
     public TankManager[] m_Tanks;               // A collection of managers for enabling and disabling different aspects of the tanks.
     public GameObject[] m_Maps;
 
@@ -30,7 +29,7 @@ public class GameController : MonoBehaviour
         m_StartWait = new WaitForSeconds (m_StartDelay);
         m_EndWait = new WaitForSeconds (m_EndDelay);
 
-        m_CurrentMapIndex = 2;// Random.Range(0, m_Maps.Length);
+        m_CurrentMapIndex = 1;// Random.Range(0, m_Maps.Length);
 
         CreateMap();
         SpawnAllTanks();
@@ -49,7 +48,7 @@ public class GameController : MonoBehaviour
             Transform spawPoint = m_CurrentMap.transform.FindChild("SpawPoint" + (i + 1));
             // ... create them, set their player number and references needed for control.
             m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, spawPoint.position, spawPoint.rotation) as GameObject;
+                Instantiate( m_Tanks[i].m_TankPrefab, spawPoint.position, spawPoint.rotation) as GameObject;
             m_Tanks[i].m_PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }

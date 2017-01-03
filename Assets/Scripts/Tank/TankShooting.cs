@@ -14,17 +14,19 @@ public class TankShooting : MonoBehaviour
     public float m_MinLaunchForce = 15f;        // The force given to the shell if the fire button is not held.
     public float m_MaxLaunchForce = 30f;        // The force given to the shell if the fire button is held for the max charge time.
     public float m_MaxChargeTime = 0.75f;       // How long the shell can charge for before it is fired at max force.
-    public float WaitFireSec = 0.5f;
     public float WaitFlakeSec =  0.1f;
+    public float fireRate = 0.5f;
 
 
-    private string m_FireButton;                // The input axis that is used for launching shells.
-    private float m_CurrentLaunchForce;         // The force that will be given to the shell when the fire button is released.
-    private float m_ChargeSpeed;                // How fast the launch force increases, based on the max charge time.
-    private bool m_Fired;                       // Whether or not the shell has been launched with this button press.
-    private GameObject m_Fire;
 
-    private void OnEnable()
+    protected string m_FireButton;                // The input axis that is used for launching shells.
+    protected float m_CurrentLaunchForce;         // The force that will be given to the shell when the fire button is released.
+    protected float m_ChargeSpeed;                // How fast the launch force increases, based on the max charge time.
+    protected bool m_Fired;                       // Whether or not the shell has been launched with this button press.
+    protected GameObject m_Fire;
+    protected float nextFire;
+
+    protected virtual void OnEnable()
     {
         // When the tank is turned on, reset the launch force and the UI
         m_CurrentLaunchForce = m_MinLaunchForce;
@@ -32,7 +34,7 @@ public class TankShooting : MonoBehaviour
     }
 
 
-    private void Start ()
+    protected virtual void Start ()
     {
         // The fire axis is based on the player number.
         m_FireButton = "Fire" + m_PlayerNumber;
@@ -51,7 +53,7 @@ public class TankShooting : MonoBehaviour
     }
 
 
-    private void Update ()
+    protected void Update ()
     {
         // The slider should have a default value of the minimum launch force.
         m_AimSlider.value = m_MinLaunchForce;
@@ -64,13 +66,16 @@ public class TankShooting : MonoBehaviour
             Fire ();
         }
         // Otherwise, if the fire button has just started being pressed...
-        else if (Input.GetButtonDown (m_FireButton))
+        else if (Input.GetButtonDown (m_FireButton) && Time.time > nextFire)
         {
+            nextFire = Time.time + fireRate;
+
             // ... reset the fired flag and reset the launch force.
             m_Fired = false;
             m_CurrentLaunchForce = m_MinLaunchForce;
 
             // Change the clip to the charging clip and start it playing.
+            m_ShootingAudio.clip = m_ChargingClip;
             m_ShootingAudio.Play();
 
         }
@@ -91,7 +96,7 @@ public class TankShooting : MonoBehaviour
     }
 
 
-    private void Fire ()
+    protected virtual void Fire ()
     {
 
         // Set the fired flag so only Fire is only called once.
@@ -109,27 +114,29 @@ public class TankShooting : MonoBehaviour
             m_ShootingAudio.Stop();
         }
         // Change the clip to the firing clip and play it.
-//        m_ShootingAudio.clip = m_FireClip;
-//        m_ShootingAudio.Play ();
+        m_ShootingAudio.clip = m_FireClip;
+        m_ShootingAudio.Play ();
 
         // Reset the launch force.  This is a precaution in case of missing button events.
         m_CurrentLaunchForce = m_MinLaunchForce;
+
+        EnableSpark();
     }
 
-    private IEnumerator WaitDisableFlake()
+    protected IEnumerator WaitDisableSpark()
     {
         yield return new WaitForSeconds(WaitFlakeSec);
 
         m_Fire.SetActive(false);
     }
 
-    private void EnableFlake()
+    protected void EnableSpark()
     {
         if (m_Fire != null && !m_Fire.activeSelf)
         {
             m_Fire.SetActive(true);
             m_Fire.transform.localRotation = Quaternion.Euler(0f, 180f, Random.Range(0, 360));
-            StartCoroutine(WaitDisableFlake());
+            StartCoroutine(WaitDisableSpark());
         }
     }
 }

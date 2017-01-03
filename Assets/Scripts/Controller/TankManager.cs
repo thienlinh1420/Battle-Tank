@@ -4,7 +4,8 @@ using UnityEngine;
 [Serializable]
 public class TankManager
 {
-    public Color m_PlayerColor;            
+    public Color m_PlayerColor;  
+    public GameObject m_TankPrefab;
     [HideInInspector] public int m_PlayerNumber;             
     [HideInInspector] public string m_ColoredPlayerText;
     [HideInInspector] public GameObject m_Instance;          
@@ -19,7 +20,15 @@ public class TankManager
     public void Setup()
     {
         m_Movement = m_Instance.GetComponent<TankMovement>();
-        m_Shooting = m_Instance.GetComponent<TankShooting>();
+
+        if (m_Instance.name == "Rocket Tank")
+        {
+            m_Shooting = m_Instance.GetComponent<RocketTankShooting>();
+        }
+        else
+        {
+            m_Shooting = m_Instance.GetComponent<TankShooting>();
+        }
         m_CanvasGameObject = m_Instance.GetComponentInChildren<Canvas>().gameObject;
 
         m_Movement.m_PlayerNumber = m_PlayerNumber;

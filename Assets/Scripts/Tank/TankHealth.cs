@@ -6,6 +6,7 @@ public class TankHealth : MonoBehaviour
     public float m_StartingHealth = 100f;               // The amount of health each tank starts with.
     public Slider m_Slider;                             // The slider to represent how much health the tank currently has.
     public Image m_FillImage;                           // The image component of the slider.
+    public Text m_HealthText;
     public Color m_FullHealthColor = Color.green;       // The color the health bar will be when on full health.
     public Color m_ZeroHealthColor = Color.red;         // The color the health bar will be when on no health.
     public GameObject m_ExplosionPrefab;                // A prefab that will be instantiated in Awake, then used whenever the tank dies.
@@ -25,22 +26,46 @@ public class TankHealth : MonoBehaviour
 
         // Update the health slider's value and color.
         SetHealthUI();
+
+
     }
 
 
     public void TakeDamage (float amount)
     {
+        amount = Mathf.Round(amount);
         // Reduce current health by the amount of damage done.
         m_CurrentHealth -= amount;
 
         // Change the UI elements appropriately.
         SetHealthUI ();
+        DisplayHealthText(amount);
 
         // If the current health is at or below zero and it has not yet been registered, call OnDeath.
         if (m_CurrentHealth <= 0f && !m_Dead)
         {
             OnDeath ();
         }
+    }
+
+    public void DisplayHealthText(float amount)
+    {
+       
+        Text healthTextInstance = Instantiate(m_HealthText, m_HealthText.transform.parent) as Text;
+        healthTextInstance.gameObject.SetActive(true);
+
+        if (amount == 0)
+        {
+            healthTextInstance.text = "MISS";
+        }
+        else
+        {
+            healthTextInstance.text = amount.ToString();
+        }
+
+        healthTextInstance.color = m_ZeroHealthColor;
+        healthTextInstance.GetComponent<Animator>().SetTrigger("Hit");
+        Destroy(healthTextInstance.gameObject, 1f);
     }
 
 

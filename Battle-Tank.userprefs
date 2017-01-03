@@ -1,14 +1,21 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Tank/TankShooting.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Shell/ShellExplosion_Net.cs">
     <Files>
-      <File FileName="Assets/Scripts/Tank/TankShooting.cs" Line="63" Column="13" />
-      <File FileName="Assets/Scripts/Tank/TankMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Tank/TankHealth.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Controller/GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Controller/TankManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Shell/ShellExplosion.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tank/TankController_Net.cs" Line="70" Column="5" />
+      <File FileName="Assets/Scripts/Tank/TankMovement.cs" Line="43" Column="6" />
       <File FileName="Assets/Scripts/Object/TreeDestroy.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tank/RocketTankShooting.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Shell/RocketExplosion.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Shell/ShellExplosion.cs" Line="133" Column="6" />
+      <File FileName="Assets/Scripts/UI/UIDirectionControl.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Tank/TankShooting.cs" Line="141" Column="6" />
+      <File FileName="Assets/Scripts/Tank/TankHealth.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Controller/GameController.cs" Line="11" Column="41" />
+      <File FileName="Assets/Scripts/Controller/TankManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Camera/CameraControl.cs" Line="24" Column="6" />
+      <File FileName="Assets/Scripts/Tank/TankShooting_Net.cs" Line="122" Column="68" />
+      <File FileName="Assets/Scripts/Shell/ShellExplosion_Net.cs" Line="46" Column="43" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
