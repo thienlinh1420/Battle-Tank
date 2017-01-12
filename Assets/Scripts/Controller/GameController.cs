@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
         m_StartWait = new WaitForSeconds (m_StartDelay);
         m_EndWait = new WaitForSeconds (m_EndDelay);
 
-        m_CurrentMapIndex = 2;// Random.Range(0, m_Maps.Length);
+        m_CurrentMapIndex = 1;// Random.Range(0, m_Maps.Length);
 
         CreateMap();
         SpawnAllTanks();
