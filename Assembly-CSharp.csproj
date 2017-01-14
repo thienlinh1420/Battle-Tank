@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\Camera\CameraControl.cs" />
      <Compile Include="Assets\Scripts\Controller\GameController.cs" />
      <Compile Include="Assets\Scripts\Controller\TankManager.cs" />
+     <Compile Include="Assets\Scripts\Object\HealthRestoreController.cs" />
      <Compile Include="Assets\Scripts\Object\TreeDestroy.cs" />
      <Compile Include="Assets\Scripts\Shell\RocketExplosion.cs" />
      <Compile Include="Assets\Scripts\Shell\ShellExplosion.cs" />
